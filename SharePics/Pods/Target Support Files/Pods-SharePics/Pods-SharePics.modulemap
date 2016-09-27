@@ -1,0 +1,6 @@
+framework module Pods_SharePics {
+  umbrella header "Pods-SharePics-umbrella.h"
+
+  export *
+  module * { export * }
+}

@@ -1,0 +1,30 @@
+{
+  "DVTSourceControlWorkspaceBlueprintPrimaryRemoteRepositoryKey" : "43F20DADE0CE0B45B07E6100E831F2774330647F",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyRepositoryLocationsKey" : {
+
+  },
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyStatesKey" : {
+    "B20D130F3B8FE4219884A09C73E55E5DEC808DE6" : 0,
+    "43F20DADE0CE0B45B07E6100E831F2774330647F" : 0
+  },
+  "DVTSourceControlWorkspaceBlueprintIdentifierKey" : "1B75CA02-A9C7-4249-92E2-843497F8D10B",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey" : {
+    "B20D130F3B8FE4219884A09C73E55E5DEC808DE6" : "",
+    "43F20DADE0CE0B45B07E6100E831F2774330647F" : "PizzaMe\/"
+  },
+  "DVTSourceControlWorkspaceBlueprintNameKey" : "PizzaMe",
+  "DVTSourceControlWorkspaceBlueprintVersion" : 204,
+  "DVTSourceControlWorkspaceBlueprintRelativePathToProjectKey" : "PizzaMe.xcodeproj",
+  "DVTSourceControlWorkspaceBlueprintRemoteRepositoriesKey" : [
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/praneetjain\/test.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "43F20DADE0CE0B45B07E6100E831F2774330647F"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/praneetjain\/POC_iOS.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "B20D130F3B8FE4219884A09C73E55E5DEC808DE6"
+    }
+  ]
+}

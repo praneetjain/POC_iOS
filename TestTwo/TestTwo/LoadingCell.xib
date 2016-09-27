@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="10117" systemVersion="15E65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="LoadingCell" id="cmg-jn-SkF">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="80"/>
+            <autoresizingMask key="autoresizingMask"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="cmg-jn-SkF" id="JAI-GJ-pJN">
+                <rect key="frame" x="0.0" y="0.0" width="320" height="79.5"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="qMg-MZ-Wv7">
+                        <rect key="frame" x="89" y="9" width="142" height="61"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Loading..." textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zI1-yN-DcZ">
+                                <rect key="frame" x="20" y="20" width="75" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="0.5" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <activityIndicatorView opaque="NO" tag="100" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="eAQ-lo-z8I">
+                                <rect key="frame" x="102" y="20" width="20" height="20"/>
+                            </activityIndicatorView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="zI1-yN-DcZ" firstAttribute="top" secondItem="qMg-MZ-Wv7" secondAttribute="top" constant="20" id="Iz7-dh-iqz"/>
+                            <constraint firstItem="zI1-yN-DcZ" firstAttribute="leading" secondItem="qMg-MZ-Wv7" secondAttribute="leading" constant="20" id="VWU-NF-0bN"/>
+                            <constraint firstAttribute="trailing" secondItem="eAQ-lo-z8I" secondAttribute="trailing" constant="20" id="bzu-cT-JDP"/>
+                            <constraint firstAttribute="bottom" secondItem="zI1-yN-DcZ" secondAttribute="bottom" constant="20" id="dTR-Pl-s6H"/>
+                            <constraint firstItem="eAQ-lo-z8I" firstAttribute="leading" secondItem="zI1-yN-DcZ" secondAttribute="trailing" constant="7" id="i8E-Wu-nSC"/>
+                            <constraint firstItem="eAQ-lo-z8I" firstAttribute="top" secondItem="qMg-MZ-Wv7" secondAttribute="top" constant="20" id="nv1-GT-5nL"/>
+                            <constraint firstAttribute="bottom" secondItem="eAQ-lo-z8I" secondAttribute="bottom" constant="21" id="xnI-dL-Rww"/>
+                        </constraints>
+                    </view>
+                </subviews>
+                <constraints>
+                    <constraint firstItem="qMg-MZ-Wv7" firstAttribute="centerY" secondItem="JAI-GJ-pJN" secondAttribute="centerY" id="2m2-ve-bbz"/>
+                    <constraint firstItem="qMg-MZ-Wv7" firstAttribute="centerX" secondItem="JAI-GJ-pJN" secondAttribute="centerX" id="w43-Nq-bYg"/>
+                </constraints>
+            </tableViewCellContentView>
+            <point key="canvasLocation" x="244" y="221"/>
+        </tableViewCell>
+    </objects>
+</document>
