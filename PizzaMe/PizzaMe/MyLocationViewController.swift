@@ -28,11 +28,11 @@ class MyLocationViewController: UITableViewController, CLLocationManagerDelegate
         super.viewDidLoad()
 
         var cell = UINib(nibName: MyLocationIdentifiers.shopCell, bundle: nil)
-        tableView.registerNib(cell, forCellReuseIdentifier: MyLocationIdentifiers.shopCell)
+        tableView.register(cell, forCellReuseIdentifier: MyLocationIdentifiers.shopCell)
         tableView.rowHeight = 120
         
         cell = UINib(nibName: MyLocationIdentifiers.loadingCell, bundle: nil)
-        tableView.registerNib(cell, forCellReuseIdentifier: MyLocationIdentifiers.loadingCell)
+        tableView.register(cell, forCellReuseIdentifier: MyLocationIdentifiers.loadingCell)
 
         
         getUserLocation()
@@ -44,25 +44,23 @@ class MyLocationViewController: UITableViewController, CLLocationManagerDelegate
         
         var stringURL = "https://query.yahooapis.com/v1/public/yql?q=select * from local.search where zip%3D'78759' and query%3D'pizza'&format=json&diagnostics=true&callback="
         
-        stringURL = stringURL.stringByReplacingOccurrencesOfString("78759", withString: zipCode)
+        stringURL = stringURL.replacingOccurrences(of: "78759", with: zipCode)
 
-        stringURL = stringURL.stringByReplacingOccurrencesOfString(" ", withString: "%20")
-        stringURL = stringURL.stringByReplacingOccurrencesOfString("'", withString: "%27")
+        stringURL = stringURL.replacingOccurrences(of: " ", with: "%20")
+        stringURL = stringURL.replacingOccurrences(of: "'", with: "%27")
         
-        let url = NSURL(string: stringURL)!
+        let url = URL(string: stringURL)!
         
-        NSLog("%@", url)
+        let session = URLSession.shared
         
-        let session = NSURLSession.sharedSession()
-        
-        let dataTask = session.dataTaskWithURL(url) { data, response, error in
+        let dataTask = session.dataTask(with: url, completionHandler: { data, response, error in
             
 
-            if let data = data, dictionary = self.parseJSON(data){
+            if let data = data, let dictionary = self.parseJSON(data){
             
             self.shops = self.parseDictionary(dictionary)
                 
-                dispatch_async(dispatch_get_main_queue()){
+                DispatchQueue.main.async{
                 
                 self.isLoading = false
                 self.tableView.reloadData()
@@ -76,7 +74,7 @@ class MyLocationViewController: UITableViewController, CLLocationManagerDelegate
                 print("Data download failed: \(response)")
                 
             }
-            dispatch_async(dispatch_get_main_queue()){
+            DispatchQueue.main.async{
             
                 self.isLoading = false
                 self.tableView.reloadData()
@@ -84,7 +82,7 @@ class MyLocationViewController: UITableViewController, CLLocationManagerDelegate
             
             }
             
-        }
+        }) 
         dataTask.resume()
         
         
@@ -92,11 +90,11 @@ class MyLocationViewController: UITableViewController, CLLocationManagerDelegate
     }
     
     
-    func parseJSON(data : NSData) -> [String : AnyObject]?{
+    func parseJSON(_ data : Data) -> [String : AnyObject]?{
     
         do{
         
-            return try NSJSONSerialization.JSONObjectWithData(data, options: []) as? [String : AnyObject]
+            return try JSONSerialization.jsonObject(with: data, options: []) as? [String : AnyObject]
         }
         catch{
         print("parseJSON failed with error: \(error)")
@@ -105,7 +103,7 @@ class MyLocationViewController: UITableViewController, CLLocationManagerDelegate
     
     }
     
-    func parseDictionary(dictionary : [String : AnyObject]) -> [Shop]{
+    func parseDictionary(_ dictionary : [String : AnyObject]) -> [Shop]{
     
         guard let dictQuery = dictionary["query"] as? [String : AnyObject] else{
         
@@ -169,12 +167,12 @@ class MyLocationViewController: UITableViewController, CLLocationManagerDelegate
     
         let authStatus = CLLocationManager.authorizationStatus()
         
-        if authStatus == .NotDetermined{
+        if authStatus == .notDetermined{
             locationManager.requestWhenInUseAuthorization()
             return
         }
         
-        if authStatus == .Denied || authStatus == .Restricted{
+        if authStatus == .denied || authStatus == .restricted{
         showLoctionServicesAccessRequestDeniedAlert()
             return
         }
@@ -185,20 +183,20 @@ class MyLocationViewController: UITableViewController, CLLocationManagerDelegate
     
     // MARK: - CLLocationManagerDelegate
     
-    func locationManager(manager: CLLocationManager, didFailWithError error: NSError) {
+    func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
         
         print("Failed to update location with error: \(error)")
         
-        if error.code == CLError.LocationUnknown.rawValue{
+        if error._code == CLError.Code.locationUnknown.rawValue{
         
             return
         }
         
         locationError = nil
-        locationError = error
+        locationError = error as NSError?
     }
     
-    func locationManager(manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         
         let newLocation = locations.last!
         print("didUpdateLocations: \(newLocation)")
@@ -228,15 +226,15 @@ class MyLocationViewController: UITableViewController, CLLocationManagerDelegate
             
             print("*** Found placemarks: \(placemarks)")
             
-            self.geocodingError = error
+            self.geocodingError = error as NSError?
             
-            if error == nil, let p = placemarks where !p.isEmpty{
+            if error == nil, let p = placemarks , !p.isEmpty{
             
               self.placemark = p.last!
                 if let zip = self.placemark?.postalCode{
                     self.zipCode = zip
                     self.fetchDataFromURLForPizzaShops()
-                    dispatch_async(dispatch_get_main_queue()){
+                    DispatchQueue.main.async{
                     
                     self.tableView.reloadData()
                     }
@@ -255,12 +253,12 @@ class MyLocationViewController: UITableViewController, CLLocationManagerDelegate
     
     func showLoctionServicesAccessRequestDeniedAlert(){
     
-        let alert = UIAlertController(title: "Location Service Disabled", message: "Please enable Location Services in Settings.", preferredStyle: .Alert)
+        let alert = UIAlertController(title: "Location Service Disabled", message: "Please enable Location Services in Settings.", preferredStyle: .alert)
         
-        let action = UIAlertAction(title: "OK", style: .Default, handler: nil)
+        let action = UIAlertAction(title: "OK", style: .default, handler: nil)
         
         alert.addAction(action)
-        presentViewController(alert, animated: true, completion: nil)
+        present(alert, animated: true, completion: nil)
     }
 
     func startLocationManger(){
@@ -291,13 +289,13 @@ class MyLocationViewController: UITableViewController, CLLocationManagerDelegate
 
     func showErrorMessage(){
     
-    let alert = UIAlertController(title: "Error", message: "Fetching value from server failed. Please try again.", preferredStyle: .Alert)
+    let alert = UIAlertController(title: "Error", message: "Fetching value from server failed. Please try again.", preferredStyle: .alert)
         
-        let action = UIAlertAction(title: "OK", style: .Default, handler: nil)
+        let action = UIAlertAction(title: "OK", style: .default, handler: nil)
         
         alert.addAction(action)
         
-        presentViewController(alert, animated: true, completion: nil)
+        present(alert, animated: true, completion: nil)
         
     }
     
@@ -317,11 +315,11 @@ class MyLocationViewController: UITableViewController, CLLocationManagerDelegate
         isLoading = false
     }
     
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         
         if segue.identifier == MyLocationIdentifiers.segueDetailScreen{
         
-        let controller = segue.destinationViewController as! DetailViewController
+        let controller = segue.destination as! DetailViewController
         controller.shop = selectedShop
             
         }
@@ -332,11 +330,11 @@ class MyLocationViewController: UITableViewController, CLLocationManagerDelegate
 //MARK: - TableViewDataSource
 extension MyLocationViewController{
 
-    override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    override func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
     
-    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
         if isLoading{
         
@@ -347,31 +345,31 @@ extension MyLocationViewController{
     }
 
 
-    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         if isLoading {
             
-            let cell = tableView.dequeueReusableCellWithIdentifier(MyLocationIdentifiers.loadingCell, forIndexPath: indexPath)
+            let cell = tableView.dequeueReusableCell(withIdentifier: MyLocationIdentifiers.loadingCell, for: indexPath)
             
             let spinner = cell.viewWithTag(100) as! UIActivityIndicatorView
             spinner.startAnimating()
             return cell
         }
         
-        let cell = tableView.dequeueReusableCellWithIdentifier(MyLocationIdentifiers.shopCell, forIndexPath: indexPath) as! ShopCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: MyLocationIdentifiers.shopCell, for: indexPath) as! ShopCell
         
         if !shops.isEmpty{
         
-            let shop = shops[indexPath.row]
+            let shop = shops[(indexPath as NSIndexPath).row]
             cell.configureForShop(shop)
         }
          return cell
 }
-    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
-        selectedShop = shops[indexPath.row]
+        selectedShop = shops[(indexPath as NSIndexPath).row]
                 
-        performSegueWithIdentifier(MyLocationIdentifiers.segueDetailScreen, sender: indexPath)
+        performSegue(withIdentifier: MyLocationIdentifiers.segueDetailScreen, sender: indexPath)
         
     }
     

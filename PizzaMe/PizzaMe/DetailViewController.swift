@@ -27,22 +27,22 @@ class DetailViewController : UIViewController{
     
     }
     
-    @IBAction func mapButtonTapped(sender: UIButton) {
+    @IBAction func mapButtonTapped(_ sender: UIButton) {
     }
-    @IBAction func callPhoneTapped(sender : UIButton){
+    @IBAction func callPhoneTapped(_ sender : UIButton){
     
-    var stringNumber = sender.titleLabel?.text?.stringByReplacingOccurrencesOfString("\\D", withString: "", options: .RegularExpressionSearch, range: nil)
+    var stringNumber = sender.titleLabel?.text?.replacingOccurrences(of: "\\D", with: "", options: .regularExpression, range: nil)
         
     stringNumber = "tel://"+stringNumber!
-    let url = NSURL(string: stringNumber!)
+    let url = URL(string: stringNumber!)
         
-    UIApplication.sharedApplication().openURL(url!)
+    UIApplication.shared.openURL(url!)
     
     }
     
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         
-        let controller = segue.destinationViewController as! MapController
+        let controller = segue.destination as! MapController
         controller.shopLocation = shop?.address
         controller.shopName = shop?.name
         
@@ -55,7 +55,7 @@ class DetailViewController : UIViewController{
         labelShopState.text = shop!.state
         labelShopCity.text = shop!.city
         labelShopDistance.text = "\(shop!.distance) mi"
-        buttonShopPhone.setTitle("Call: \(shop!.phone)", forState: .Normal)
+        buttonShopPhone.setTitle("Call: \(shop!.phone)", for: UIControlState())
         
     }
 

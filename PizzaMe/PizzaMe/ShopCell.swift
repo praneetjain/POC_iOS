@@ -21,7 +21,7 @@ class ShopCell : UITableViewCell{
     @IBOutlet weak var labelShopDistance: UILabel!
     @IBOutlet weak var labelShopState: UILabel!
     
-    func configureForShop(shop : Shop){
+    func configureForShop(_ shop : Shop){
     
     labelShopName.text = shop.name
     labelShopAddress.text = shop.address

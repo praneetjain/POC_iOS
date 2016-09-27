@@ -57,25 +57,25 @@ class MapController : UIViewController{
     }
 
     
-    @IBAction func doneButtonTapped(sender: AnyObject) {
-        dismissViewControllerAnimated(true, completion: nil)
+    @IBAction func doneButtonTapped(_ sender: AnyObject) {
+        dismiss(animated: true, completion: nil)
     }
     
     func showNetworkError(){
     
-    let alert = UIAlertController(title: "Whoops...", message: "Unable to get location. Please check your internet connection or try again after some time.", preferredStyle: .Alert)
+    let alert = UIAlertController(title: "Whoops...", message: "Unable to get location. Please check your internet connection or try again after some time.", preferredStyle: .alert)
         
-    let action = UIAlertAction(title: "OK", style: .Default, handler: nil)
+    let action = UIAlertAction(title: "OK", style: .default, handler: nil)
     alert.addAction(action)
-        presentViewController(alert, animated: true, completion: nil)
+        present(alert, animated: true, completion: nil)
         
     }
     
 }
     extension MapController:UINavigationBarDelegate{
         
-        func positionForBar(bar : UIBarPositioning) -> UIBarPosition{
-            return .TopAttached
+        func position(for bar : UIBarPositioning) -> UIBarPosition{
+            return .topAttached
         }
         
 }

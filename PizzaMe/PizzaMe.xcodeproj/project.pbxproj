@@ -116,6 +116,7 @@
 					27DBC1E81CF662950054C46E = {
 						CreatedOnToolsVersion = 7.3.1;
 						DevelopmentTeam = ZRNF73Z9S9;
+						LastSwiftMigration = 0800;
 					};
 				};
 			};
@@ -275,6 +276,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.example.praneet.PizzaMe;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
+				SWIFT_VERSION = 3.0;
 			};
 			name = Debug;
 		};
@@ -289,6 +291,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.example.praneet.PizzaMe;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
+				SWIFT_VERSION = 3.0;
 			};
 			name = Release;
 		};
