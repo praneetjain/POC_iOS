@@ -23,7 +23,7 @@ class ViewController: UIViewController {
     
     var winningCombinations = [[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]]
     
-    @IBAction func playAgainTapped(sender: AnyObject) {
+    @IBAction func playAgainTapped(_ sender: AnyObject) {
         
          activePlayer = 1
         
@@ -35,31 +35,31 @@ class ViewController: UIViewController {
         
         var button : UIButton
         
-        for var i=1; i<10; i++ {
+        for i in 1 ..< 10 {
             
         button = view.viewWithTag(i) as! UIButton
         
-        button.setImage(nil, forState: .Normal)
+        button.setImage(nil, for: UIControlState())
         }
         
-        gameOverLabel.hidden = true
+        gameOverLabel.isHidden = true
         
-        playAgainButton.hidden = true
+        playAgainButton.isHidden = true
         
         
     }
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        gameOverLabel.center = CGPointMake(gameOverLabel.center.x - 400, gameOverLabel.center.y)
-        playAgainButton.center = CGPointMake(playAgainButton.center.x - 400, playAgainButton.center.y)
+        gameOverLabel.center = CGPoint(x: gameOverLabel.center.x - 400, y: gameOverLabel.center.y)
+        playAgainButton.center = CGPoint(x: playAgainButton.center.x - 400, y: playAgainButton.center.y)
 
-        gameOverLabel.hidden=true
-        playAgainButton.hidden=true
+        gameOverLabel.isHidden=true
+        playAgainButton.isHidden=true
     
     }
 
-    @IBAction func buttonTapped(sender: AnyObject) {
+    @IBAction func buttonTapped(_ sender: AnyObject) {
         
         if gameState[sender.tag-1] == 0 && gameActive == true{
         
@@ -77,7 +77,7 @@ class ViewController: UIViewController {
             activePlayer = 1
         }
         
-        sender.setImage(image, forState: .Normal)
+        sender.setImage(image, for: UIControlState())
             
             for combination in winningCombinations {
             
@@ -92,13 +92,13 @@ class ViewController: UIViewController {
                     
                     gameOverLabel.text = labelText
                     
-                    gameOverLabel.hidden = false
-                    playAgainButton.hidden = false
+                    gameOverLabel.isHidden = false
+                    playAgainButton.isHidden = false
                     
-UIView.animateWithDuration(0.5, animations: { () -> Void in
+UIView.animate(withDuration: 0.5, animations: { () -> Void in
     
-    self.gameOverLabel.center = CGPointMake(self.gameOverLabel.center.x + 400, self.gameOverLabel.center.y)
-    self.playAgainButton.center = CGPointMake(self.playAgainButton.center.x + 400, self.playAgainButton.center.y)
+    self.gameOverLabel.center = CGPoint(x: self.gameOverLabel.center.x + 400, y: self.gameOverLabel.center.y)
+    self.playAgainButton.center = CGPoint(x: self.playAgainButton.center.x + 400, y: self.playAgainButton.center.y)
 
 })
                     
