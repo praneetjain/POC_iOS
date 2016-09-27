@@ -10,16 +10,16 @@ import UIKit
 
 extension UIImageView{
 
-    func imageDownloadWithURL(url : NSURL) -> NSURLSessionDownloadTask?{
+    func imageDownloadWithURL(_ url : URL) -> URLSessionDownloadTask?{
     
-    let session = NSURLSession.sharedSession()
+    let session = URLSession.shared
         
-    let downloadTask = session.downloadTaskWithURL(url) { [weak self]url, response, error in
+    let downloadTask = session.downloadTask(with: url, completionHandler: { [weak self]url, response, error in
         
         
-        if error == nil, let url = url, data = NSData(contentsOfURL: url), image = UIImage(data: data){
+        if error == nil, let url = url, let data = try? Data(contentsOf: url), let image = UIImage(data: data){
         
-            dispatch_async(dispatch_get_main_queue()){
+            DispatchQueue.main.async{
             
                 if let strongSelf = self{
                     strongSelf.image = image
@@ -30,7 +30,7 @@ extension UIImageView{
         
         }
         
-        }
+        }) 
     downloadTask.resume()
     
     return downloadTask

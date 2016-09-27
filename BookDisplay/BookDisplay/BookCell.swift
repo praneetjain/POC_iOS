@@ -13,25 +13,25 @@ class BookCell: UITableViewCell {
     @IBOutlet weak var labelBookImage: UIImageView!
     @IBOutlet weak var labelBookName: UILabel!
     
-    var downloadTask : NSURLSessionDownloadTask?
+    var downloadTask : URLSessionDownloadTask?
     
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
     }
 
-    override func setSelected(selected: Bool, animated: Bool) {
+    override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
 
         // Configure the view for the selected state
     }
 
     
-    func configureCell(book : Book){
+    func configureCell(_ book : Book){
     
         labelBookName?.text = book.bookName
         
-        let thumbnailURL = NSURL(string: book.bookSmallThumbnailURL)
+        let thumbnailURL = URL(string: book.bookSmallThumbnailURL)
         
         if let thumbnailURL = thumbnailURL{
         downloadTask = labelBookImage?.imageDownloadWithURL(thumbnailURL)

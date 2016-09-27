@@ -12,13 +12,13 @@ class BookTableViewController: UITableViewController {
 
     var books = [Book]()
     
-    var dataTask : NSURLSessionDataTask?
+    var dataTask : URLSessionDataTask?
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        let cell = UINib(nibName: BookTableViewIdentifiers.bookCell, bundle: NSBundle.mainBundle())
-        tableView.registerNib(cell, forCellReuseIdentifier: BookTableViewIdentifiers.bookCell)
+        let cell = UINib(nibName: BookTableViewIdentifiers.bookCell, bundle: Bundle.main)
+        tableView.register(cell, forCellReuseIdentifier: BookTableViewIdentifiers.bookCell)
         tableView.rowHeight = 80
         
         fetchDataFromURL()
@@ -29,19 +29,19 @@ class BookTableViewController: UITableViewController {
     
     
         let stringURL = "https://www.googleapis.com/books/v1/volumes?q=Harry%20Potter%20Azkaban"
-        let url = NSURL(string: stringURL)
+        let url = URL(string: stringURL)
         
-        let session = NSURLSession.sharedSession()
+        let session = URLSession.shared
         
         if let url = url{
         
-         dataTask = session.dataTaskWithURL(url) { data, response, error in
+         dataTask = session.dataTask(with: url, completionHandler: { data, response, error in
             
-            if let data = data, dictionary = self.parseJSON(data){
+            if let data = data, let dictionary = self.parseJSON(data){
             
                 self.books = self.parseDictionary(dictionary)
                 
-                dispatch_async(dispatch_get_main_queue()){
+                DispatchQueue.main.async{
                 
                     self.tableView.reloadData()
                 }
@@ -55,7 +55,7 @@ class BookTableViewController: UITableViewController {
             
             self.tableView.reloadData()
             self.showDataFetchFailError()
-            }
+            }) 
         }
         
         dataTask?.resume()
@@ -63,11 +63,11 @@ class BookTableViewController: UITableViewController {
     }
     
     
-    func parseJSON(data : NSData) -> [String : AnyObject]?{
+    func parseJSON(_ data : Data) -> [String : AnyObject]?{
     
         do{
         
-            return try NSJSONSerialization.JSONObjectWithData(data, options: []) as? [String : AnyObject]
+            return try JSONSerialization.jsonObject(with: data, options: []) as? [String : AnyObject]
         }
         catch{
         
@@ -77,7 +77,7 @@ class BookTableViewController: UITableViewController {
     }
     
 
-    func parseDictionary(dictionary : [String : AnyObject]) -> [Book]{
+    func parseDictionary(_ dictionary : [String : AnyObject]) -> [Book]{
         
         guard let array = dictionary["items"] as? [AnyObject] else{
             
@@ -92,11 +92,11 @@ class BookTableViewController: UITableViewController {
                 
                 let book = Book()
                 
-                if let volumeDict = bookDict["volumeInfo"] as? [String : AnyObject], title = volumeDict["title"] as? String{
+                if let volumeDict = bookDict["volumeInfo"] as? [String : AnyObject], let title = volumeDict["title"] as? String{
                     
                     book.bookName =  title
                     
-                    if let imageLinks = volumeDict["imageLinks"] as? [String : AnyObject], imageURL = imageLinks["smallThumbnail"] as? String{
+                    if let imageLinks = volumeDict["imageLinks"] as? [String : AnyObject], let imageURL = imageLinks["smallThumbnail"] as? String{
                         
                         book.bookSmallThumbnailURL = imageURL
                         
@@ -117,19 +117,19 @@ class BookTableViewController: UITableViewController {
         // Dispose of any resources that can be recreated.
     }
 
-    override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    override func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
 
-    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return books.count
     }
     
-    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        let cell = tableView.dequeueReusableCellWithIdentifier(BookTableViewIdentifiers.bookCell, forIndexPath: indexPath) as! BookCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: BookTableViewIdentifiers.bookCell, for: indexPath) as! BookCell
         
-        cell.configureCell(books[indexPath.row])
+        cell.configureCell(books[(indexPath as NSIndexPath).row])
         
         return cell
     }
@@ -142,12 +142,12 @@ class BookTableViewController: UITableViewController {
 
 func showDataFetchFailError(){
     
-    let alertController = UIAlertController(title: "Whoops...", message: "There was error in fetching data from server. Please try again.", preferredStyle: .Alert)
+    let alertController = UIAlertController(title: "Whoops...", message: "There was error in fetching data from server. Please try again.", preferredStyle: .alert)
     
-    let action = UIAlertAction(title: "OK", style: .Default, handler: nil)
+    let action = UIAlertAction(title: "OK", style: .default, handler: nil)
     
     alertController.addAction(action)
-    presentViewController(alertController, animated: true, completion: nil)
+    present(alertController, animated: true, completion: nil)
     
 }
 
