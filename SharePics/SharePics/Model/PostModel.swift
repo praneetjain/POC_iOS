@@ -11,7 +11,7 @@ import UIKit
 class Post{
 
     let creator : String
-    let timestamp : NSDate
+    let timestamp : Date
     let image : UIImage
     let caption : String?
     let postID : String?
@@ -23,10 +23,10 @@ class Post{
         self.creator = creator
         self.image = image
         self.caption = caption
-        timestamp = NSDate()
+        timestamp = Date()
     }
     
-    static func initWithPostID(postID: String, postDict: [String: String]) -> Post? {
+    static func initWithPostID(_ postID: String, postDict: [String: String]) -> Post? {
         guard let creator = postDict["creator"], let base64String = postDict["image"] else {
             // Conditions failed...
             print("Invalid Post Dictionary!")

@@ -28,7 +28,7 @@ class Profile{
         
     }
     
-    static func initWithUsername(username: String, profileDict:[String : AnyObject]) -> Profile?{
+    static func initWithUsername(_ username: String, profileDict:[String : AnyObject]) -> Profile?{
     
     let profile = Profile.createUser(username)
         if let followers = profileDict["followers"] as? [String]{
@@ -50,20 +50,20 @@ class Profile{
     }
     
     
-    static func createUser(username : String!) -> Profile{
+    static func createUser(_ username : String!) -> Profile{
     
     return Profile(username: username, followers: Array<String>(), following: [String](), posts: [String](), picture: nil)
     }
     
     func dictValue() -> [String : AnyObject]{
         var profileDict = [String : AnyObject]()
-        profileDict["username"] = username
-        profileDict["followers"] = followers
-        profileDict["following"] = following
-        profileDict["posts"] = posts
+        profileDict["username"] = username as AnyObject?
+        profileDict["followers"] = followers as AnyObject?
+        profileDict["following"] = following as AnyObject?
+        profileDict["posts"] = posts as AnyObject?
         
         if let profPicture = picture{
-        profileDict["picture"] = profPicture.base64String()
+        profileDict["picture"] = profPicture.base64String() as AnyObject?
         }
         return profileDict
     }

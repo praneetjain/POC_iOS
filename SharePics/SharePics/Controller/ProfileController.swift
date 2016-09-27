@@ -33,14 +33,14 @@ class ProfileController : UIViewController{
                 actionButton.backgroundColor = UIColor.rawColor(red: 228, green: 228, blue: 228, alpha: 1.0)
                 actionButton.layer.borderWidth = 1
             case .NotFollowing:
-                actionButton.backgroundColor = UIColor.whiteColor()
-                actionButton.layer.borderColor = UIColor.rawColor(red: 18, green: 86, blue: 136, alpha: 1.0).CGColor
+                actionButton.backgroundColor = UIColor.white
+                actionButton.layer.borderColor = UIColor.rawColor(red: 18, green: 86, blue: 136, alpha: 1.0).cgColor
                 actionButton.layer.borderWidth = 1
             case .Following:
                 actionButton.backgroundColor = UIColor.rawColor(red: 111, green: 187, blue: 82, alpha: 1.0)
                 actionButton.layer.borderWidth = 0
             }
-        actionButton.setTitle(newState.rawValue, forState: .Normal)
+        actionButton.setTitle(newState.rawValue, for: UIControlState())
         }
     
     }
@@ -67,10 +67,10 @@ class ProfileController : UIViewController{
             updateProfile()
         }
         else{
-        logoutButton.enabled = false
-        logoutButton.tintColor = UIColor.clearColor()
+        logoutButton.isEnabled = false
+        logoutButton.tintColor = UIColor.clear
         }
-        profileRef.child(username).observeSingleEventOfType(.Value, withBlock: { snapshot in
+        profileRef.child(username).observeSingleEvent(of: .value, with: { snapshot in
          
             guard let profile = snapshot.value as? [String : AnyObject] else{
             return
@@ -88,14 +88,14 @@ class ProfileController : UIViewController{
                 }
             }
             self.updateProfile()
-            }, withCancelBlock: {
+            }, withCancel: {
         error in
                 print("Error loading \(self.profileUsername)'s profile \(error.localizedDescription)")
                 
         })
     }
     
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
     
         navigationItem.title = profileUsername
@@ -112,23 +112,23 @@ class ProfileController : UIViewController{
         
     }
     
-    @IBAction func editProfile(sender : AnyObject){
+    @IBAction func editProfile(_ sender : AnyObject){
     print("User wants to edit their profile")
         switch actionButtonState {
         case .CurrentUser:
-            let actionSheet = UIAlertController(title: "Edit Profile", message: nil, preferredStyle: .ActionSheet)
-            let cancelAction = UIAlertAction(title: "Cancel", style: .Cancel, handler: nil)
-            let photoAction = UIAlertAction(title: "Change Photo", style: .Default, handler: { action in
+            let actionSheet = UIAlertController(title: "Edit Profile", message: nil, preferredStyle: .actionSheet)
+            let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+            let photoAction = UIAlertAction(title: "Change Photo", style: .default, handler: { action in
                 let picker = UIImagePickerController()
                 picker.allowsEditing = true
-                picker.sourceType = .PhotoLibrary
+                picker.sourceType = .photoLibrary
                 picker.delegate = self
-                self.presentViewController(picker, animated: true, completion: nil)
+                self.present(picker, animated: true, completion: nil)
                
             })
             actionSheet.addAction(photoAction)
             actionSheet.addAction(cancelAction)
-            presentViewController(actionSheet, animated: true, completion: nil)
+            present(actionSheet, animated: true, completion: nil)
         case .NotFollowing:
             actionButtonState = .Following
             Profile.currentUser?.following.append(userProfile!.username)
@@ -138,30 +138,30 @@ class ProfileController : UIViewController{
 
         case .Following:
             actionButtonState = .NotFollowing
-            if let index = Profile.currentUser?.following.indexOf(profileUsername!){
-            Profile.currentUser?.following.removeAtIndex(index)
+            if let index = Profile.currentUser?.following.index(of: profileUsername!){
+            Profile.currentUser?.following.remove(at: index)
             
             }
-            if let index = Profile.currentUser?.followers.indexOf(profileUsername!){
-            Profile.currentUser?.followers.removeAtIndex(index)
+            if let index = Profile.currentUser?.followers.index(of: profileUsername!){
+            Profile.currentUser?.followers.remove(at: index)
             }
 userProfile?.sync()
             Profile.currentUser?.sync()
         }
     }
-    @IBAction func logoutTapped(sender : UIBarButtonItem!){
+    @IBAction func logoutTapped(_ sender : UIBarButtonItem!){
     postRef.removeAllObservers()
-        tabBarController?.dismissViewControllerAnimated(true, completion: nil)
+        tabBarController?.dismiss(animated: true, completion: nil)
     }
 }
 
 extension ProfileController : UIImagePickerControllerDelegate, UINavigationControllerDelegate{
 
-    func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : AnyObject]) {
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
         userProfile?.picture = info[UIImagePickerControllerEditedImage] as? UIImage
         profilePic.image = userProfile?.picture
         userProfile?.sync()
-        picker.dismissViewControllerAnimated(true, completion: nil)
+        picker.dismiss(animated: true, completion: nil)
     }
     
     

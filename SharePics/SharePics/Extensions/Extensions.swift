@@ -20,19 +20,19 @@ extension UIImage{
 
     func base64String() -> String{
     let imageData = UIImagePNGRepresentation(self)
-    let base64String = imageData!.base64EncodedStringWithOptions(.Encoding64CharacterLineLength)
+    let base64String = imageData!.base64EncodedString(options: .lineLength64Characters)
     return base64String
     }
 
-    static func imageWithBase64String(base64String: String) -> UIImage{
+    static func imageWithBase64String(_ base64String: String) -> UIImage{
     
-        let decodedData = NSData(base64EncodedString: base64String, options: NSDataBase64DecodingOptions.IgnoreUnknownCharacters)!
+        let decodedData = Data(base64Encoded: base64String, options: NSData.Base64DecodingOptions.ignoreUnknownCharacters)!
         let postImage = UIImage(data: decodedData)
         return postImage!
     }
     
     
-    static func initWithPostID(postID : String, postDict : [String : String]) -> Post?{
+    static func initWithPostID(_ postID : String, postDict : [String : String]) -> Post?{
     
     guard let creator = postDict["creator"], let base64String = postDict["image"] else{
     //conditions failed...

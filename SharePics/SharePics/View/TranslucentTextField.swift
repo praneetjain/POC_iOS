@@ -13,16 +13,16 @@ class TranslucentTextField : UITextField{
     required init?(coder aDecoder: NSCoder) {
         placeholderText = ""
         super.init(coder: aDecoder)
-        tintColor = UIColor.whiteColor()
+        tintColor = UIColor.white
         layer.cornerRadius = 3
     }
     
-    override func textRectForBounds(bounds: CGRect) -> CGRect {
-        return CGRectInset(bounds, 16, 0)
+    override func textRect(forBounds bounds: CGRect) -> CGRect {
+        return bounds.insetBy(dx: 16, dy: 0)
     }
     
-    override func editingRectForBounds(bounds: CGRect) -> CGRect {
-        return CGRectInset(bounds, 16, 0)
+    override func editingRect(forBounds bounds: CGRect) -> CGRect {
+        return bounds.insetBy(dx: 16, dy: 0)
     }
     
     var placeholderText : String{

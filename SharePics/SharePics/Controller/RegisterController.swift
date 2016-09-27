@@ -11,8 +11,8 @@ import Firebase
 import FirebaseAuth
 
 protocol RegisterControllerDelegate : class {
-    func registerControllerDidCancel(registerController : RegisterController)
-    func registerControllerDidFinish(registerController : RegisterController, withEmail email: String)
+    func registerControllerDidCancel(_ registerController : RegisterController)
+    func registerControllerDidFinish(_ registerController : RegisterController, withEmail email: String)
 }
 class RegisterController : UIViewController{
     @IBOutlet weak var emailField : TranslucentTextField!
@@ -29,38 +29,38 @@ class RegisterController : UIViewController{
         
         registerButton.layer.borderWidth = 1
         registerButton.layer.cornerRadius = 5
-        registerButton.layer.borderColor = UIColor.lightTextColor().CGColor
+        registerButton.layer.borderColor = UIColor.lightText.cgColor
 
-        emailField.addTarget(self, action: #selector(RegisterController.textFieldDidChange(_:)), forControlEvents: .EditingChanged)
-        passwordField.addTarget(self, action: #selector(RegisterController.textFieldDidChange(_:)), forControlEvents: .EditingChanged)
-        usernameField.addTarget(self, action: #selector(RegisterController.textFieldDidChange(_:)), forControlEvents: .EditingChanged)
+        emailField.addTarget(self, action: #selector(RegisterController.textFieldDidChange(_:)), for: .editingChanged)
+        passwordField.addTarget(self, action: #selector(RegisterController.textFieldDidChange(_:)), for: .editingChanged)
+        usernameField.addTarget(self, action: #selector(RegisterController.textFieldDidChange(_:)), for: .editingChanged)
 
     }
     
-    func textFieldDidChange(textField : UITextField!){
-        if let username = usernameField.text where !username.isEmpty, let password = passwordField.text where !password.isEmpty, let email = emailField.text where !email.isEmpty{
-            registerButton.setTitleColor(UIColor.whiteColor(), forState: .Normal)
-            registerButton.enabled = true
+    func textFieldDidChange(_ textField : UITextField!){
+        if let username = usernameField.text , !username.isEmpty, let password = passwordField.text , !password.isEmpty, let email = emailField.text , !email.isEmpty{
+            registerButton.setTitleColor(UIColor.white, for: UIControlState())
+            registerButton.isEnabled = true
         }else{
-            registerButton.setTitleColor(UIColor.lightTextColor(), forState: .Disabled)
-            registerButton.enabled = false
+            registerButton.setTitleColor(UIColor.lightText, for: .disabled)
+            registerButton.isEnabled = false
         }
     }
-    @IBAction func registerTapped(sender : UIButton!){
+    @IBAction func registerTapped(_ sender : UIButton!){
     
-        guard let email = emailField?.text where !email.isEmpty, let password = passwordField?.text where !password.isEmpty, let username = usernameField?.text where !username.isEmpty else{
+        guard let email = emailField?.text , !email.isEmpty, let password = passwordField?.text , !password.isEmpty, let username = usernameField?.text , !username.isEmpty else{
         return
         }
     
         
-        FIRAuth.auth()?.createUserWithEmail(email, password: password, completion: { result, error in
+        FIRAuth.auth()?.createUser(withEmail: email, password: password, completion: { result, error in
             if error != nil{
             
                 print("Error occured during registration \(error?.localizedDescription)")
             return
             }
             
-            guard let uid = result!.uid as? String else{
+            guard let uid = result?.uid else{
             
                 print("Invalid username for user \(email)")
                 return
@@ -68,18 +68,18 @@ class RegisterController : UIViewController{
             
             usernameRef.child(uid).setValue(username)
             profileRef.child(username).setValue(["username":username])
-            let alertController = UIAlertController(title: "Registration Success!", message: "Your account was successfully created using email \(email)", preferredStyle: .Alert)
-            let alertAction = UIAlertAction(title: "OK", style: .Default, handler: {
+            let alertController = UIAlertController(title: "Registration Success!", message: "Your account was successfully created using email \(email)", preferredStyle: .alert)
+            let alertAction = UIAlertAction(title: "OK", style: .default, handler: {
             alertAction in
             //go to login controller and pass the email id for sign up
                 self.delegate?.registerControllerDidFinish(self, withEmail: email)
             })
             alertController.addAction(alertAction)
-            self.presentViewController(alertController, animated: true, completion: nil)
+            self.present(alertController, animated: true, completion: nil)
         })
     }
 
-    @IBAction func loginTapped(sender : UIButton!){
+    @IBAction func loginTapped(_ sender : UIButton!){
     delegate?.registerControllerDidCancel(self)
     }
     

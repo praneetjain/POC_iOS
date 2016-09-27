@@ -10,7 +10,7 @@ import UIKit
 
 protocol CaptionControllerDelegate : class {
     
-    func captionController(controller : CaptionController, didFinishWithCaption caption: String)
+    func captionController(_ controller : CaptionController, didFinishWithCaption caption: String)
 }
 
 class CaptionController : UIViewController{
@@ -25,17 +25,17 @@ class CaptionController : UIViewController{
         imagePreview.image = selectedImage
     }
     
-    @IBAction func tap(sender : UITapGestureRecognizer!){
+    @IBAction func tap(_ sender : UITapGestureRecognizer!){
     captionTextView.resignFirstResponder()
     }
     
-    @IBAction func submitPressed(sender : UIButton!){
+    @IBAction func submitPressed(_ sender : UIButton!){
         if let captionDelegate = self.delegate{
             captionDelegate.captionController(self, didFinishWithCaption: captionTextView.text)
         }
     }
     
-    @IBAction func backPressed(sender : UIButton!){
-    self.dismissViewControllerAnimated(true, completion: nil)
+    @IBAction func backPressed(_ sender : UIButton!){
+    self.dismiss(animated: true, completion: nil)
     }
 }

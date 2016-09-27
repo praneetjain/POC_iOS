@@ -20,31 +20,31 @@ class CameraController : UIViewController, UIImagePickerControllerDelegate, UINa
         sourceLabel.text = "No image selected"
     }
 
-    func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : AnyObject]) {
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
         selectedImage = info[UIImagePickerControllerEditedImage] as? UIImage
         self.selectedImageView.image = selectedImage
         
-        if picker.sourceType == .Camera {
+        if picker.sourceType == .camera {
             self.sourceLabel.text = "PHOTO"
         }
-        else if picker.sourceType == .PhotoLibrary{
+        else if picker.sourceType == .photoLibrary{
         self.sourceLabel.text = "LIBRARY"
         }
         
-        picker.dismissViewControllerAnimated(true, completion: nil)
+        picker.dismiss(animated: true, completion: nil)
     }
     
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         
-        let controller = segue.destinationViewController as! CaptionController
+        let controller = segue.destination as! CaptionController
         controller.selectedImage = selectedImage
         controller.delegate = self
         
     }
     
-    func captionController(controller: CaptionController, didFinishWithCaption caption: String) {
-        controller.dismissViewControllerAnimated(true, completion: nil)
-        guard let postImage = selectedImage else{
+    func captionController(_ controller: CaptionController, didFinishWithCaption caption: String) {
+        controller.dismiss(animated: true, completion: nil)
+        guard (selectedImage != nil) else{
         
             print("No image selected")
             return
@@ -58,29 +58,29 @@ class CameraController : UIViewController, UIImagePickerControllerDelegate, UINa
         let tabbarController = self.presentingViewController as? UITabBarController
         tabbarController?.selectedIndex = 0 //Goes back to feed tab
         
-        self.dismissViewControllerAnimated(true, completion: nil)
+        self.dismiss(animated: true, completion: nil)
     }
     
-    @IBAction func takePhoto(sender : UIButton!){
+    @IBAction func takePhoto(_ sender : UIButton!){
     
         let picker = UIImagePickerController()
         picker.allowsEditing = true
-        picker.sourceType = .Camera
+        picker.sourceType = .camera
         picker.delegate = self
-        self.presentViewController(picker, animated: true, completion: nil)
+        self.present(picker, animated: true, completion: nil)
     
     }
     
-    @IBAction func selectPhoto(sender : UIButton!){
+    @IBAction func selectPhoto(_ sender : UIButton!){
     let picker = UIImagePickerController()
         picker.allowsEditing = true
-        picker.sourceType = .PhotoLibrary
+        picker.sourceType = .photoLibrary
         picker.delegate = self
-        self.presentViewController(picker, animated: true, completion: nil)
+        self.present(picker, animated: true, completion: nil)
     
     }
     
-    @IBAction func dismissPhotoPicker(sender : UIButton!){
-    self.dismissViewControllerAnimated(true, completion: nil)
+    @IBAction func dismissPhotoPicker(_ sender : UIButton!){
+    self.dismiss(animated: true, completion: nil)
     }
 }
